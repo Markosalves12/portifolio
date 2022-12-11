@@ -1,0 +1,66 @@
+from Administrador_Banco import painel_do_administrador
+#impotando o banco teste para a central
+from Administrador_Banco import banco
+
+
+#nome e senha do administrador do banco
+nome_p = 'markos'
+senha_p = '123456'
+
+
+#funcao do painel central do banco, para os agentes entrarem em seus respectivos paineis
+#e executarem suas respectivas funcoes
+def central():
+    #variavel que define em qual subpainel entrar
+    quem_sou_eu = input("Quem é você: \n"
+                        "1 - Administrador do banco: \n"
+                        "2 - Gerente de agencia: \n"
+                        "3 - Cliente de uma agencia:__")
+    #tratamento da variavel antes de ir para a checagem
+    try:
+        quem_sou_eu = int(quem_sou_eu)
+    except:
+        print("Comando invalido")
+        pass
+
+    if quem_sou_eu == 1:
+        #verificando se o administrador é realmete o administrador
+        while True:
+            print("Login do administrador: ")
+            nome = input("Nome: ")
+            senha = input("Senha: ")
+            if nome == nome_p and senha == senha_p:
+                #painel do administrador é outro arquivo com as funções reservadas do administrador
+                #as funções do administrador retornam True, apenas uma retorna False para retornar a esse painel
+                while painel_do_administrador.painel_do_administrador():
+                    continue
+                break
+
+    elif quem_sou_eu == 2:
+        #checando se o administrador criou alguma agencia antes, se o numero de agencia for zero
+        #não faz sentido que tenha alguem tentando logar como gerente
+        if len(banco.banco_teste.agencias) == 0:
+            print("Ainda não possuimos agencias")
+        else:
+            #entrando no banco teste e executando a função que irá localizar a agencia que ele trabalha
+            #antes de inserir os dados, a agencia que o gerente trabalha deve existir nas bases de dados do banco
+            banco.banco_teste.busca_agencia()
+
+    elif quem_sou_eu == 3:
+        #checando se o administrador criou alguma agencia antes, se o numero de agencia for zero
+        #não faz sentido que tenha alguem tentando logar como cliente
+        if len(banco.banco_teste.agencias) == 0:
+            print("Ainda não possuimos agencias")
+        else:
+            #entrando no banco teste e executando a função que irá localizar a agencia em que ele é cliente
+            #antes de inserir os dados, a agencia que o gerente trabalha deve existir nas bases de dados do banco
+            banco.banco_teste.busca_agencia_cliente()
+    #caso o comando não exista, ele deve ser simplesmente ignorado
+    else:
+        print("Comando invalido")
+
+
+while True:
+    #loop infinito das funções e verificações da central
+    central()
+
